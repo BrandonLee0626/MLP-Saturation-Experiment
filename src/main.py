@@ -159,7 +159,7 @@ def main(args):
             seed=seed
         )
 
-    seeds = range(1, args.seed + 1)
+    seeds = range(1, args.repeat + 1)
     if thresholding_layer == 'all':
         thresholding_layer = [[0,1,2,3,4]]
     elif thresholding_layer == 'one':
