@@ -4,6 +4,8 @@ import pandas as pd
 def save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, repeat, root_dir):
     multihead_str = "multihead" if multihead else "singlehead"
     layer_w_thresholding_str = "None" if layer_w_thresholding == [[]] else "_".join(map(str, layer_w_thresholding))
+    if classes_per_task == 0:
+        classes_per_task = 100 // tasks_number
     for result_type in result:
         file_name = f'MLP_GPM_{result_type}_{multihead_str}_{tasks_number}_tasks_{classes_per_task}_classes_hidden_dim_{hidden_dim}_topk_{topk}_layer_idx_w_thresholding_{layer_w_thresholding_str}_repeat_{repeat}.csv'
 
