@@ -1,10 +1,10 @@
 import os
 import pandas as pd
 
-def save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, adaptive_threshold, repeat, root_dir):
+def save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, fixed_threshold, repeat, root_dir):
     multihead_str = "multihead" if multihead else "singlehead"
     layer_w_thresholding_str = "None" if layer_w_thresholding == [[]] else "_".join(map(str, layer_w_thresholding))
-    adaptive_threshold_str = "adaptive_threshold" if adaptive_threshold else "fixed_threshold"
+    adaptive_threshold_str = f"fixed_threshold_{fixed_threshold}" if fixed_threshold else "increasing_threshold"
     if classes_per_task == 0:
         classes_per_task = 100 // tasks_number
     for result_type in result:
