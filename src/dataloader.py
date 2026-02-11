@@ -75,6 +75,8 @@ def get_cifar100(device, tasks_number, classes_per_task, get_feature, for_multih
             loader=torch.utils.data.DataLoader(dat[s],batch_size=1,shuffle=False)
             for image,target in loader:
                 n=target.numpy()[0]
+                if n >= tasks_number * classes_per_task:
+                    continue
                 nn=(n//classes_per_task)
                 data[nn][s]['x'].append(image) # 255
                 if for_multihead:
