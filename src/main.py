@@ -7,7 +7,7 @@ from dataloader import get_cifar100
 from models import *
 from utils import save_result
 
-def run_experiment(seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, k, epochs):
+def run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, k, epochs):
     lr = args.lr
     lr_patience = args.lr_patience
     lr_factor = args.lr_factor
@@ -182,7 +182,7 @@ def main(args):
         for seed in seeds:
             args.seed = seed
 
-            acc_matrix, gradient_basis_number, best_acc, final_acc, best_final_gap = run_experiment(seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, topk, epochs)
+            acc_matrix, gradient_basis_number, best_acc, final_acc, best_final_gap = run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, topk, epochs)
 
             all_acc_matrix.append(acc_matrix)
             all_gradient_basis_numbers.append(gradient_basis_number)
