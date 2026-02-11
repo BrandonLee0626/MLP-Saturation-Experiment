@@ -7,7 +7,7 @@ from dataloader import get_cifar100
 from models import *
 from utils import save_result
 
-def run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, k, epochs):
+def run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, adaptive_threshold, k, epochs):
     lr = args.lr
     lr_patience = args.lr_patience
     lr_factor = args.lr_factor
@@ -24,7 +24,10 @@ def run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_
     criterion = torch.nn.CrossEntropyLoss()
 
     for task_id, classes_per_task in taskcla:
-        threshold = np.array([0.97] * 5) + task_id*np.array([0.03 / tasks_number] * 5)
+        if adaptive_threshold:
+            threshold = np.array([0.97] * 5) + task_id*np.array([0.03 / tasks_number] * 5)
+        else:
+            threshold = np.array([0.985] * 5)
 
         xtrain=data[task_id]['train']['x']
         ytrain=data[task_id]['train']['y']
@@ -145,6 +148,7 @@ def main(args):
     topk = args.topk
     repeat = args.repeat
     epochs = args.epochs
+    adaptive_threshold = args.adaptive_threshold
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -182,7 +186,7 @@ def main(args):
         for seed in seeds:
             args.seed = seed
 
-            acc_matrix, gradient_basis_number, best_acc, final_acc, best_final_gap = run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, topk, epochs)
+            acc_matrix, gradient_basis_number, best_acc, final_acc, best_final_gap = run_experiment(args, seed, device, data, taskcla, tasks_number, classes_per_task, multihead, hidden_dim, layer_w_thresholding, adaptive_threshold, topk, epochs)
 
             all_acc_matrix.append(acc_matrix)
             all_gradient_basis_numbers.append(gradient_basis_number)
@@ -202,7 +206,7 @@ def main(args):
             "best_final": np.column_stack((avg_best_acc, avg_final_acc, avg_best_final_gap))
         }
 
-        save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, repeat, './')
+        save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, adaptive_threshold, repeat, './')
 
 if __name__ == '__main__':
     # Training parameters
@@ -247,6 +251,9 @@ if __name__ == '__main__':
                         help='Use multihead model')
     parser.add_argument('--thresholding_layer', default='all', type=str, metavar='T', choices=['none', 'one', 'accumulative', 'all'],
                         help='thresholding type (default: all) [candidates: none, one, accumulative, all]')
+    parser.add_argument('--adaptive_threshold', action='store_true',
+                        help='Increase threshold adapively')
+
 
     args = parser.parse_args()
 
