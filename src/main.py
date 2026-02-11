@@ -148,7 +148,7 @@ def main(args):
     topk = args.topk
     repeat = args.repeat
     epochs = args.epochs
-    fixed_threshold = args.fixed_threshod
+    fixed_threshold = args.fixed_threshold
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
