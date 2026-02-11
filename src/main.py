@@ -202,7 +202,7 @@ def main(args):
             "best_final": np.column_stack((avg_best_acc, avg_final_acc, avg_best_final_gap))
         }
 
-    save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, repeat, './')
+        save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, topk, layer_w_thresholding, repeat, './')
 
 if __name__ == '__main__':
     # Training parameters
