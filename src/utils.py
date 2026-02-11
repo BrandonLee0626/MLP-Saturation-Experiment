@@ -15,8 +15,8 @@ def save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, t
         file_path = os.path.join(result_dir, file_name)
 
         if result_type == "acc_matrix":
-            index = [f'Task {i}' for i in range(tasks_number)]
-            columns = [f'After learn task {i}' for i in range(tasks_number)]
+            index = [f'After learn task {i}' for i in range(tasks_number)]
+            columns = [f'Task {i}' for i in range(tasks_number)]
         elif result_type == "gradient_basis_number":
             index = [f'Layer {i+1}' for i in range(5)]
             columns = [f'After learn task {i}' for i in range(tasks_number)]
