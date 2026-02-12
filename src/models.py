@@ -31,7 +31,6 @@ class MLP(nn.Module):
             for t,n in self.taskcla:
                 self.mh.append(torch.nn.Linear(hidden_dim,n,bias=False))
         else:
-            self.map.append(hidden_dim)
             self.sh = nn.Linear(hidden_dim, output_dim)
         
         self.relu = nn.ReLU()
@@ -59,7 +58,6 @@ class MLP(nn.Module):
                 y.append(self.mh[t](x))
         
         else:
-            self.act['sh'] = x
             y = self.sh(x)
             
         return y
@@ -111,7 +109,7 @@ def train(args, model, device, x,y, optimizer,criterion, task_id, classes_per_ta
                 if params.grad is None:
                     continue
 
-                if kk < len(feature_mat)-1 and len(params.size()) == 2:
+                if kk < len(feature_mat) and len(params.size()) == 2:
                     sz = params.grad.data.size(0)
                     params.grad.data = params.grad.data - torch.mm(params.grad.data.view(sz,-1),\
                                                             feature_mat[kk]).view(params.size())
