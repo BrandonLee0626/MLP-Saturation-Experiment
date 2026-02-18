@@ -165,14 +165,14 @@ def main(args):
 
     seeds = range(1, args.repeat + 1)
     if thresholding_layer == 'all':
-        thresholding_layer = [[0,1,2,3,4]]
+        thresholding_layer = [[0,1,2,3]]
     elif thresholding_layer == 'one':
-        thresholding_layer = [[i] for i in range(5)]
+        thresholding_layer = [[i] for i in range(4)]
     elif thresholding_layer == 'none':
         thresholding_layer = [[]]
     elif thresholding_layer == 'accumulative':
-        thresholding_layer = [list(range(0,i+1)) for i in range(5)]
-        thresholding_layer += [list(range(i,5)) for i in range(5)]
+        thresholding_layer = [list(range(0,i+1)) for i in range(4)]
+        thresholding_layer += [list(range(i,4)) for i in range(4)]
     else:
         thresholding_layer = [[]]
 

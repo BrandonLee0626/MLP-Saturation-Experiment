@@ -19,7 +19,7 @@ def save_result(result, multihead, tasks_number, classes_per_task, hidden_dim, t
             index = [f'After learn task {i}' for i in range(tasks_number)]
             columns = [f'Task {i}' for i in range(tasks_number)]
         elif result_type == "gradient_basis_number":
-            index = [f'Layer {i+1}' for i in range(5)]
+            index = [f'Layer {i}' for i in range(5)]
             columns = [f'After learn task {i}' for i in range(tasks_number)]
         elif result_type == "best_final":
             index = [f'Task {i}' for i in range(tasks_number)]
