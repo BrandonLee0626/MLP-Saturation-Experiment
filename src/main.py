@@ -140,7 +140,8 @@ def main(args):
     dataset = args.dataset
     seed = args.seed
     pc_valid = args.pc_valid
-    thresholding_layer = args.thresholding_layer
+    thresholding_layer_type = args.thresholding_layer_type
+    thresholding_layer_index = args.thresholding_layer_index
     tasks_number = args.tasks_number
     classes_per_task = args.classes_per_task
     multihead = args.multihead
@@ -164,13 +165,17 @@ def main(args):
         )
 
     seeds = range(1, args.repeat + 1)
-    if thresholding_layer == 'all':
+
+    if thresholding_layer_index != '_':
+        thresholding_layer = [list(map(int, thresholding_layer_index.split('_')))]
+
+    elif thresholding_layer_type == 'all':
         thresholding_layer = [[0,1,2,3]]
-    elif thresholding_layer == 'one':
+    elif thresholding_layer_type == 'one':
         thresholding_layer = [[i] for i in range(4)]
-    elif thresholding_layer == 'none':
+    elif thresholding_layer_type == 'none':
         thresholding_layer = [[]]
-    elif thresholding_layer == 'accumulative':
+    elif thresholding_layer_type == 'accumulative':
         thresholding_layer = [list(range(0,i+1)) for i in range(4)]
         thresholding_layer += [list(range(i,4)) for i in range(4)]
     else:
@@ -249,8 +254,10 @@ if __name__ == '__main__':
                         help='how many times repeat experiments')
     parser.add_argument('--multihead', action='store_true',
                         help='Use multihead model')
-    parser.add_argument('--thresholding_layer', default='all', type=str, metavar='T', choices=['none', 'one', 'accumulative', 'all'],
+    parser.add_argument('--thresholding_layer_type', default='all', type=str, metavar='T', choices=['none', 'one', 'accumulative', 'all'],
                         help='thresholding type (default: all) [candidates: none, one, accumulative, all]')
+    parser.add_argument('--thresholding_layer_index', default='_', type=str, metavar='TI',
+                        help="index of layer to don't apply thresholding (input like 1_2_3, take priority than thresholding layer type)")
     parser.add_argument('--fixed_threshold', type=float, default=0., metavar='FT',
                         help='Setting threshold for determine number of bases for adding to GPM (default: linearly increase from 0.97)')
 
